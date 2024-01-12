@@ -11,7 +11,7 @@ java {
     sourceCompatibility = '21'
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
-        vendor = JvmVendorSpec.ADOPTOPENJDK
+        vendor = JvmVendorSpec.ADOPTIUM
     }
 }
 
