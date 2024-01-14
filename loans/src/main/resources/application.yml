@@ -1,6 +1,13 @@
 server:
   port: 8090
 spring:
+  application:
+    name: loans
+  profiles:
+    active: prod
+  config:
+    import: optional:configserver:http://localhost:8071/
+
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver

@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +21,16 @@ import org.springframework.web.bind.annotation.*;
 )
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 public class CardsController {
 
-    private ICardsService iCardsService;
+    private final ICardsService iCardsService;
+
+    @Value("${greetings-message:#{null}}")
+    private String greetingsMessage;
+
+    public CardsController(ICardsService iCardsService) {
+        this.iCardsService = iCardsService;
+    }
 
     @Operation(
             summary = "Create Cards REST API",
@@ -106,5 +112,18 @@ public class CardsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(CardsConstants.STATUS_500, CardsConstants.MESSAGE_500));
         }
+    }
+
+    @Operation(
+            summary = "Greetings Cards Details REST API",
+            description = "REST API to show greetings"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status OK"
+    )
+    @GetMapping("/greetings")
+    public ResponseEntity<String> greetings() {
+        return ResponseEntity.status(HttpStatus.OK).body(greetingsMessage);
     }
 }
