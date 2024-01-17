@@ -16,7 +16,7 @@ spring:
           clone-on-start: true
           force-pull: true
   rabbitmq:
-    host: localhost
+    host: rabbitmq-spring-app
     port: 5672
     username: guest
     password: guest
@@ -28,9 +28,9 @@ management:
         include: "*"
 
   health:
-    readinessstate:
+    readiness-state:
       enabled: true
-    livenessstate:
+    liveness-state:
       enabled: true
   endpoint:
     health:

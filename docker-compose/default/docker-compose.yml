@@ -1,0 +1,79 @@
+# To create all microservices without own Spring's logs: docker-compose up -d
+# To start existing all microservices without own Spring's logs: docker-compose start -d
+
+# To stop all microservices: docker-compose stop
+# To stop and remove all microservices: docker-compose down
+
+services:
+  rabbit:
+    image: rabbitmq:3.12-management
+    hostname: rabbitmq-spring-app
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - kent0kmicroservicesharednetwork
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  configserver-container:
+    image: kent0k/configserver:s6
+    container_name: configserver-microservice
+    tty: true
+    ports:
+      - 8071:8071
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+    volumes:
+      - ./ssh_keys:/home/cnb/.ssh # we need manually add ssh keys from host OS to 'ssh_keys' folder to pass host ssh keys to local docker container to assume that GIT cloud config will work
+    healthcheck:
+      test: "bash -c 'echo -n > /dev/tcp/127.0.0.1/8071'"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      rabbit:
+        condition: service_healthy
+
+  accounts:
+    image: kent0k/accounts:s6
+    container_name: accounts-microservice
+    ports:
+      - 8081:8080
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    environment:
+      SPRING_APPLICATION_NAME: accounts
+
+  loans:
+    image: kent0k/loans:s6
+    container_name: loans-microservice
+    ports:
+      - 8082:8090
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    environment:
+      SPRING_APPLICATION_NAME: loans
+
+  cards:
+    image: kent0k/cards:s6
+    container_name: cards-microservice
+    ports:
+      - 8083:9000
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    environment:
+      SPRING_APPLICATION_NAME: cards
+
+networks:
+  kent0kmicroservicesharednetwork:
+    driver: bridge
