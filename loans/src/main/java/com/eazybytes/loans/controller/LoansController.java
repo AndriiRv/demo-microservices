@@ -1,5 +1,6 @@
 package com.eazybytes.loans.controller;
 
+import com.eazybytes.loans.dto.LoansConfigurationSettingsDto;
 import com.eazybytes.loans.dto.ResponseDto;
 import com.eazybytes.loans.constants.LoansConstants;
 import com.eazybytes.loans.dto.LoansDto;
@@ -8,7 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +22,11 @@ import org.springframework.web.bind.annotation.*;
 )
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@AllArgsConstructor
 public class LoansController {
 
     private final ILoansService iLoansService;
-
-    @Value("${greetings-message:#{null}}")
-    private String greetingsMessage;
-
-    public LoansController(ILoansService iLoansService) {
-        this.iLoansService = iLoansService;
-    }
+    private final LoansConfigurationSettingsDto loansConfigurationSettingsDto;
 
     @Operation(
             summary = "Create Loans REST API",
@@ -124,6 +120,6 @@ public class LoansController {
     )
     @GetMapping("/greetings")
     public ResponseEntity<String> greetings() {
-        return ResponseEntity.status(HttpStatus.OK).body(greetingsMessage);
+        return ResponseEntity.status(HttpStatus.OK).body(loansConfigurationSettingsDto.getValue());
     }
 }

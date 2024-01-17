@@ -1,6 +1,7 @@
 package com.eazybytes.accounts.controller;
 
 import com.eazybytes.accounts.constants.AccountsConstants;
+import com.eazybytes.accounts.dto.AccountsConfigurationSettingsDto;
 import com.eazybytes.accounts.dto.CustomerDto;
 import com.eazybytes.accounts.dto.ResponseDto;
 import com.eazybytes.accounts.service.IAccountsService;
@@ -8,7 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +22,11 @@ import org.springframework.web.bind.annotation.*;
 )
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@AllArgsConstructor
 public class AccountsController {
 
     private final IAccountsService iAccountsService;
-
-    @Value("${greetings-message:#{null}}")
-    private String greetingsMessage;
-
-    public AccountsController(IAccountsService iAccountsService) {
-        this.iAccountsService = iAccountsService;
-    }
+    private final AccountsConfigurationSettingsDto accountsConfigurationSettingsDto;
 
     @Operation(
             summary = "Create Account REST API",
@@ -124,6 +120,6 @@ public class AccountsController {
     )
     @GetMapping("/greetings")
     public ResponseEntity<String> greetings() {
-        return ResponseEntity.status(HttpStatus.OK).body(greetingsMessage);
+        return ResponseEntity.status(HttpStatus.OK).body(accountsConfigurationSettingsDto.getValue());
     }
 }
