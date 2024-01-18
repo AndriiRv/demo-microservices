@@ -6,18 +6,18 @@
 
 services:
 
-# Hookdeck is need to set up auto trigger 'localhost' endpoint. More: github webhooks.
+  # Hookdeck is need to set up auto trigger 'localhost' endpoint. More: github webhooks.
   hookdeck:
     image: hookdeck/hookdeck-cli:latest
     entrypoint: [ "/bin/sh","-c" ]
     stdin_open: true
     tty: true
     command:
-# We need to run these two commands manually in EXEC in Docker hookdeck container
+      # We need to run these two commands manually in EXEC in Docker hookdeck container
       - |
         hookdeck login --cli-key 4dd16gfai1ay12nkfuo62any7ymzr7i8cor0czbaabgyx4tupw
         hookdeck listen 8071 Source
-# Next please input '/monitor' and after that 'configserver-container'
+    # Next please input '/monitor' and after that 'configserver-container'
     networks:
       - kent0kmicroservicesharednetwork
 
