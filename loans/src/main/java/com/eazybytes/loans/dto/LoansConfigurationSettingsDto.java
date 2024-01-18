@@ -2,14 +2,12 @@ package com.eazybytes.loans.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Component
+@ConfigurationProperties(value = "microservice-config")
 @Getter
 @Setter
 public class LoansConfigurationSettingsDto {
 
-    @Value("${greetings-message:#{null}}")
-    private String value;
+    private String greetingsMessage;
 }

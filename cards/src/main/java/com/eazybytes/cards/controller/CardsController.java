@@ -120,6 +120,6 @@ public class CardsController {
     )
     @GetMapping("/greetings")
     public ResponseEntity<String> greetings() {
-        return ResponseEntity.status(HttpStatus.OK).body(cardsConfigurationSettingsDto.getValue());
+        return ResponseEntity.status(HttpStatus.OK).body(cardsConfigurationSettingsDto.getGreetingsMessage());
     }
 }
