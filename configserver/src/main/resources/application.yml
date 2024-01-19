@@ -21,6 +21,7 @@ spring:
     username: guest
     password: guest
 
+# To refresh config values for all microservices via Spring Cloud Bus & Spring Cloud Config Monitor: http://localhost:8071/monitor?path[0]=accounts&path[1]=cards&path[2]=loans
 management:
   endpoints:
     web:

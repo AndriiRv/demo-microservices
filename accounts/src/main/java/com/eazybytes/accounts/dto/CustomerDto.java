@@ -16,6 +16,5 @@ public class CustomerDto {
     @NotBlank
     private String mobileNumber;
 
-    @Valid
     private AccountsDto accountsDto;
 }

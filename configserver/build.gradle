@@ -21,7 +21,7 @@ ext {
 
 // generate docker image
 bootBuildImage {
-    imageName = "kent0k/configserver:s6"
+    imageName = "kent0k/configserver:s7"
 }
 
 dependencies {
