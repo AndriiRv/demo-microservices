@@ -2,6 +2,10 @@ services:
   network-deploy-service:
     networks:
       - kent0kmicroservicesharednetwork
+    deploy:
+      resources:
+        limits:
+          memory: 500m
 
   microservice-db-config:
     extends:
@@ -15,18 +19,10 @@ services:
       start_period: 10s
     environment:
       MYSQL_ROOT_PASSWORD: root
-    deploy:
-      resources:
-        limits:
-          memory: 700m
 
   microservice-base-config:
     extends:
       service: network-deploy-service
-    deploy:
-      resources:
-        limits:
-          memory: 700m
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq-spring-app
 
@@ -41,3 +37,12 @@ services:
       SPRING_CONFIG_IMPORT: configserver:http://configserver-container:8071/
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+
+  microservice-eurekaserver-config:
+    extends:
+      service: microservice-configserver-config
+    depends_on:
+      eurekaserver-container:
+        condition: service_healthy
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver-container:8070/eureka/

@@ -59,7 +59,3 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-bootBuildImage {
-    imageName = "kent0k/loans:s7"
-}

@@ -40,6 +40,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -58,8 +59,4 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-bootBuildImage {
-    imageName = "kent0k/accounts:s7"
 }

@@ -6,7 +6,7 @@ public interface ILoansService {
 
     void createLoans(LoansDto customerDto);
 
-    LoansDto fetchLoans(Long loanId);
+    LoansDto fetchLoans(String mobileNumber);
 
     boolean updateLoans(LoansDto customerDto);
 

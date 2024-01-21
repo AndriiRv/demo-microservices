@@ -6,7 +6,7 @@ public interface ICardsService {
 
     void createCards(CardsDto cardsDto);
 
-    CardsDto fetchCards(Long cardId);
+    CardsDto fetchCards(String mobileNumber);
 
     boolean updateCards(CardsDto cardsDto);
 

@@ -33,9 +33,9 @@ public class CardsServiceImpl implements ICardsService {
     }
 
     @Override
-    public CardsDto fetchCards(Long cardId) {
-        Cards loans = cardsRepository.findById(cardId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cards", "cardId", cardId.toString()));
+    public CardsDto fetchCards(String mobileNumber) {
+        Cards loans = cardsRepository.findByMobileNumber(Long.valueOf(mobileNumber))
+                .orElseThrow(() -> new ResourceNotFoundException("Cards", "mobileNumber", mobileNumber));
         return CardsMapper.mapToCardsDto(loans, new CardsDto());
     }
 

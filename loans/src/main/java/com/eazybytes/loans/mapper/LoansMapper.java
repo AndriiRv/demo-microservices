@@ -6,6 +6,7 @@ import com.eazybytes.loans.entity.Loans;
 public class LoansMapper {
 
     public static LoansDto mapToLoansDto(Loans loans, LoansDto loansDto) {
+        loansDto.setLoanId(loans.getLoanId());
         loansDto.setMobileNumber(loans.getMobileNumber());
         loansDto.setLoanNumber(loans.getLoanNumber());
         loansDto.setLoanType(loans.getLoanType());
@@ -16,6 +17,7 @@ public class LoansMapper {
     }
 
     public static Loans mapToLoans(LoansDto loansDto, Loans loans) {
+        loans.setLoanId(loansDto.getLoanId());
         loans.setMobileNumber(loansDto.getMobileNumber());
         loans.setLoanNumber(loansDto.getLoanNumber());
         loans.setLoanType(loansDto.getLoanType());

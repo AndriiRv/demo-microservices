@@ -19,11 +19,6 @@ ext {
     set('springCloudVersion', "2023.0.0")
 }
 
-// generate docker image
-bootBuildImage {
-    imageName = "kent0k/configserver:s7"
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 

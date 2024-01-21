@@ -46,15 +46,15 @@ public class LoansController {
 
     @Operation(
             summary = "Fetch Loans Details REST API",
-            description = "REST API to fetch Loans details based on a loan id"
+            description = "REST API to fetch Loans details based on a mobile number"
     )
     @ApiResponse(
             responseCode = "200",
             description = "HTTP status OK"
     )
     @GetMapping("/fetch")
-    public ResponseEntity<LoansDto> fetchLoansDetails(@RequestParam Long loansId) {
-        LoansDto customerDto = iLoansService.fetchLoans(loansId);
+    public ResponseEntity<LoansDto> fetchLoansDetails(@RequestParam String mobileNumber) {
+        LoansDto customerDto = iLoansService.fetchLoans(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
 

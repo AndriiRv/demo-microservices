@@ -33,9 +33,9 @@ public class LoansServiceImpl implements ILoansService {
     }
 
     @Override
-    public LoansDto fetchLoans(Long loansId) {
-        Loans loans = loansRepository.findById(loansId)
-                .orElseThrow(() -> new ResourceNotFoundException("Loans", "loansId", loansId.toString()));
+    public LoansDto fetchLoans(String mobileNumber) {
+        Loans loans = loansRepository.findByMobileNumber(Long.valueOf(mobileNumber))
+                .orElseThrow(() -> new ResourceNotFoundException("Loans", "mobileNumber", mobileNumber));
         return LoansMapper.mapToLoansDto(loans, new LoansDto());
     }
 
