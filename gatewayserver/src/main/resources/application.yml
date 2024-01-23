@@ -1,0 +1,44 @@
+
+spring:
+  application:
+    name: gatewayserver
+  config:
+    import: optional:configserver:http://localhost:8071/
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true # Eureka server will share microservices data with Gateway
+          lowerCaseServiceId: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  endpoint:
+    gateway:
+      enabled: true
+
+  info:
+    env:
+      enabled: true
+
+logging:
+  level:
+    com:
+      eazybytes:
+        gatewayserver: DEBUG
+
+info:
+  app:
+    name: gatewayserver
+    description: Eazy Bank Gateway Server Application
+    version: "1.0.0"
+

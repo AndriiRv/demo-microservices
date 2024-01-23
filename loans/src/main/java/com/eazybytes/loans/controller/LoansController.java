@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,17 @@ import org.springframework.web.bind.annotation.*;
 )
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 public class LoansController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoansController.class);
 
     private final ILoansService iLoansService;
     private final LoansConfigurationSettingsDto loansConfigurationSettingsDto;
+
+    public LoansController(ILoansService iLoansService, LoansConfigurationSettingsDto loansConfigurationSettingsDto) {
+        this.iLoansService = iLoansService;
+        this.loansConfigurationSettingsDto = loansConfigurationSettingsDto;
+    }
 
     @Operation(
             summary = "Create Loans REST API",
@@ -53,7 +61,10 @@ public class LoansController {
             description = "HTTP status OK"
     )
     @GetMapping("/fetch")
-    public ResponseEntity<LoansDto> fetchLoansDetails(@RequestParam String mobileNumber) {
+    public ResponseEntity<LoansDto> fetchLoansDetails(@RequestHeader(value = "eazybank-correlation-id") String correlationId,
+                                                      @RequestParam String mobileNumber) {
+        LOGGER.debug("eazyBank-correlation-id found: {}", correlationId);
+
         LoansDto customerDto = iLoansService.fetchLoans(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }

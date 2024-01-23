@@ -6,6 +6,8 @@
 
 FROM eclipse-temurin:21-jdk
 
+RUN apt-get update && apt-get install -y curl
+
 MAINTAINER eazybytes.com
 
 COPY build/libs/cards-0.0.1-SNAPSHOT.jar cards-0.0.1-SNAPSHOT.jar

@@ -1,11 +1,7 @@
 
 FROM eclipse-temurin:21-jdk
 
-RUN apt-get update && apt-get install -y \
-curl
-RUN useradd -ms /bin/bash cnb
-USER cnb
-WORKDIR /home/cnb
+RUN apt-get update && apt-get install -y curl
 
 MAINTAINER eazybytes.com
 

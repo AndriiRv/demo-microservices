@@ -39,7 +39,7 @@ services:
       start_period: 10s
 
   configserver-container:
-    image: kent0k/configserver:s8
+    image: kent0k/configserver:s9
     container_name: configserver-microservice
     ports:
       - 8071:8071
@@ -63,7 +63,7 @@ services:
         condition: service_healthy
 
   eurekaserver-container:
-    image: kent0k/eurekaserver:s8
+    image: kent0k/eurekaserver:s9
     container_name: eurekaserver-microservice
     ports:
       - 8070:8070
@@ -82,6 +82,28 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+
+  gatewayserver-container:
+    image: kent0k/gatewayserver:s9
+    container_name: gatewayserver-microservice
+    ports:
+      - 8072:8072
+    extends:
+      file: common-config.yml
+      service: microservice-eurekaserver-config
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+    environment:
+      SPRING_APPLICATION_NAME: gatewayserver
+    depends_on:
+      accounts:
+        condition: service_healthy
+      cards:
+        condition: service_healthy
+      loans:
+        condition: service_healthy
 
   accountsdb-container:
     container_name: accountsdb
@@ -112,7 +134,7 @@ services:
       service: microservice-db-config
 
   accounts:
-    image: kent0k/accounts:s8
+    image: kent0k/accounts:s9
     container_name: accounts-microservice
     ports:
       - 8081:8080
@@ -122,12 +144,18 @@ services:
     environment:
       SPRING_APPLICATION_NAME: accounts
       SPRING_DATASOURCE_URL: jdbc:mysql://accountsdb-container:3306/accountsdb
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     depends_on:
       accountsdb-container:
         condition: service_healthy
 
   loans:
-    image: kent0k/loans:s8
+    image: kent0k/loans:s9
     container_name: loans-microservice
     ports:
       - 8082:8090
@@ -137,12 +165,18 @@ services:
     environment:
       SPRING_APPLICATION_NAME: loans
       SPRING_DATASOURCE_URL: jdbc:mysql://loansdb-container:3306/loansdb
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     depends_on:
       loansdb-container:
         condition: service_healthy
 
   cards:
-    image: kent0k/cards:s8
+    image: kent0k/cards:s9
     container_name: cards-microservice
     ports:
       - 8083:9000
@@ -152,6 +186,12 @@ services:
     environment:
       SPRING_APPLICATION_NAME: cards
       SPRING_DATASOURCE_URL: jdbc:mysql://cardsdb-container:3306/cardsdb
+    healthcheck:
+      test: "curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     depends_on:
       cardsdb-container:
         condition: service_healthy

@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,17 @@ import org.springframework.web.bind.annotation.*;
 )
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 public class CardsController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CardsController.class);
 
     private final ICardsService iCardsService;
     private final CardsConfigurationSettingsDto cardsConfigurationSettingsDto;
+
+    public CardsController(ICardsService iCardsService, CardsConfigurationSettingsDto cardsConfigurationSettingsDto) {
+        this.iCardsService = iCardsService;
+        this.cardsConfigurationSettingsDto = cardsConfigurationSettingsDto;
+    }
 
     @Operation(
             summary = "Create Cards REST API",
@@ -53,7 +61,10 @@ public class CardsController {
             description = "HTTP status OK"
     )
     @GetMapping("/fetch")
-    public ResponseEntity<CardsDto> fetchCardsDetails(@RequestParam String mobileNumber) {
+    public ResponseEntity<CardsDto> fetchCardsDetails(@RequestHeader(value = "eazybank-correlation-id") String correlationId,
+                                                      @RequestParam String mobileNumber) {
+        LOGGER.debug("eazyBank-correlation-id found: {}", correlationId);
+
         CardsDto customerDto = iCardsService.fetchCards(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }

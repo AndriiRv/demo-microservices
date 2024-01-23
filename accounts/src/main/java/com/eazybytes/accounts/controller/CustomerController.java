@@ -10,13 +10,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(
         name = "REST API for Customers in EazyBank",
@@ -24,10 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 )
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 public class CustomerController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
+
     private final ICustomerService iCustomerService;
+
+    public CustomerController(ICustomerService iCustomerService) {
+        this.iCustomerService = iCustomerService;
+    }
 
     @Operation(
             summary = "Fetch Customer Details Details REST API",
@@ -45,7 +49,9 @@ public class CustomerController {
             ),
     })
     @GetMapping("/fetchCustomerDetails")
-    public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@RequestParam String mobileNumber) {
-        return ResponseEntity.status(HttpStatus.OK).body(iCustomerService.fetchCustomerDetails(mobileNumber));
+    public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@RequestHeader(value = "eazybank-correlation-id") String correlationId,
+                                                                   @RequestParam String mobileNumber) {
+        LOGGER.debug("eazyBank-correlation-id found: {}", correlationId);
+        return ResponseEntity.status(HttpStatus.OK).body(iCustomerService.fetchCustomerDetails(mobileNumber, correlationId));
     }
 }
