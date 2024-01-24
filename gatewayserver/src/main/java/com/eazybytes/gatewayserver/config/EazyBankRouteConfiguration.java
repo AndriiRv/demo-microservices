@@ -1,7 +1,7 @@
 package com.eazybytes.gatewayserver.config;
 
 import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.cloud.gateway.route.builder.*;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,7 +20,10 @@ public class EazyBankRouteConfiguration {
                 // add route which enable access to 'accounts' microservice via '/eazybank/accounts/' uri path
                 .route(predicateSpec -> predicateSpec
                         .path("/eazybank/accounts/**")
-                        .filters(gatewayFilterSpec -> gatewayFilterSpec.rewritePath("/eazybank/accounts/(?<segment>,*)", "/${segment}"))
+                        .filters(gatewayFilterSpec -> gatewayFilterSpec.rewritePath("/eazybank/accounts/(?<segment>,*)", "/${segment}")
+                                .circuitBreaker(config -> config.setName("accountsCircuitBreaker")
+                                        .setFallbackUri("forward:/contactSupport"))
+                        )
                         .uri("lb://ACCOUNTS"))
                 .route(predicateSpec -> predicateSpec
                         .path("/eazybank/cards/**")
