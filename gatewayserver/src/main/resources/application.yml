@@ -15,6 +15,9 @@ spring:
         locator:
           enabled: true # Eureka server will share microservices data with Gateway
           lowerCaseServiceId: true
+      httpclient:
+        connectTimeout: 5000
+        responseTimeout: 2s
 
 management:
   endpoints:
