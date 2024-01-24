@@ -1,9 +1,14 @@
 package com.eazybytes.gatewayserver.config;
 
+import org.springframework.cloud.gateway.filter.factory.RetryGatewayFilterFactory;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+
+import java.time.Duration;
+import java.util.function.Consumer;
 
 @Configuration
 public class EazyBankRouteConfiguration {
@@ -27,7 +32,11 @@ public class EazyBankRouteConfiguration {
                         .uri("lb://ACCOUNTS"))
                 .route(predicateSpec -> predicateSpec
                         .path("/eazybank/cards/**")
-                        .filters(gatewayFilterSpec -> gatewayFilterSpec.rewritePath("/eazybank/cards/(?<segment>,*)", "/${segment}"))
+                        .filters(gatewayFilterSpec -> gatewayFilterSpec.rewritePath("/eazybank/cards/(?<segment>,*)", "/${segment}")
+                                .retry(retryConfig -> retryConfig.setRetries(3)
+                                        .setMethods(HttpMethod.GET)
+                                        .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
+                        )
                         .uri("lb://CARDS"))
                 .route(predicateSpec -> predicateSpec
                         .path("/eazybank/loans/**")
