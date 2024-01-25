@@ -24,6 +24,7 @@ services:
 
   rabbit:
     image: rabbitmq:3.12-management
+    container_name: rabbit
     hostname: rabbitmq-spring-app
     ports:
       - 5672:5672
@@ -38,8 +39,23 @@ services:
       retries: 10
       start_period: 10s
 
+  redis-container:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
   configserver-container:
-    image: kent0k/configserver:s9
+    image: kent0k/configserver:s10
     container_name: configserver-microservice
     ports:
       - 8071:8071
@@ -63,7 +79,7 @@ services:
         condition: service_healthy
 
   eurekaserver-container:
-    image: kent0k/eurekaserver:s9
+    image: kent0k/eurekaserver:s10
     container_name: eurekaserver-microservice
     ports:
       - 8070:8070
@@ -84,7 +100,7 @@ services:
       start_period: 10s
 
   gatewayserver-container:
-    image: kent0k/gatewayserver:s9
+    image: kent0k/gatewayserver:s10
     container_name: gatewayserver-microservice
     ports:
       - 8072:8072
@@ -97,12 +113,18 @@ services:
           memory: 500m
     environment:
       SPRING_APPLICATION_NAME: gatewayserver
+      SPRING_DATA_REDIS_CONNECT-TIMEOUT: 2s
+      SPRING_DATA_REDIS_HOST: redis-container
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_TIMEOUT: 1s
     depends_on:
       accounts:
         condition: service_healthy
       cards:
         condition: service_healthy
       loans:
+        condition: service_healthy
+      redis-container:
         condition: service_healthy
 
   accountsdb-container:
@@ -134,7 +156,7 @@ services:
       service: microservice-db-config
 
   accounts:
-    image: kent0k/accounts:s9
+    image: kent0k/accounts:s10
     container_name: accounts-microservice
     ports:
       - 8081:8080
@@ -155,7 +177,7 @@ services:
         condition: service_healthy
 
   loans:
-    image: kent0k/loans:s9
+    image: kent0k/loans:s10
     container_name: loans-microservice
     ports:
       - 8082:8090
@@ -176,7 +198,7 @@ services:
         condition: service_healthy
 
   cards:
-    image: kent0k/cards:s9
+    image: kent0k/cards:s10
     container_name: cards-microservice
     ports:
       - 8083:9000
