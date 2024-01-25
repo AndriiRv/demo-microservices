@@ -1,6 +1,5 @@
 package com.eazybytes.gatewayserver.config;
 
-import org.springframework.cloud.gateway.filter.factory.RetryGatewayFilterFactory;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -8,10 +7,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 
 import java.time.Duration;
-import java.util.function.Consumer;
 
 @Configuration
 public class EazyBankRouteConfiguration {
+
+    private final RedisRateLimiterConfiguration redisRateLimiterConfiguration;
+
+    public EazyBankRouteConfiguration(RedisRateLimiterConfiguration redisRateLimiterConfiguration) {
+        this.redisRateLimiterConfiguration = redisRateLimiterConfiguration;
+    }
 
     /**
      * Add new custom microservices routes for RouteLocator.
@@ -40,7 +44,11 @@ public class EazyBankRouteConfiguration {
                         .uri("lb://CARDS"))
                 .route(predicateSpec -> predicateSpec
                         .path("/eazybank/loans/**")
-                        .filters(gatewayFilterSpec -> gatewayFilterSpec.rewritePath("/eazybank/loans/(?<segment>,*)", "/${segment}"))
+                        .filters(gatewayFilterSpec -> gatewayFilterSpec.rewritePath("/eazybank/loans/(?<segment>,*)", "/${segment}")
+                                .requestRateLimiter(config -> config
+                                        .setRateLimiter(redisRateLimiterConfiguration.redisRateLimiter())
+                                        .setKeyResolver(redisRateLimiterConfiguration.userKeyResolver()))
+                        )
                         .uri("lb://LOANS")).build();
     }
 }
