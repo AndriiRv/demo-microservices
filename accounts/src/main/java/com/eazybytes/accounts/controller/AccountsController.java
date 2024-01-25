@@ -5,6 +5,7 @@ import com.eazybytes.accounts.dto.AccountsConfigurationSettingsDto;
 import com.eazybytes.accounts.dto.CustomerDto;
 import com.eazybytes.accounts.dto.ResponseDto;
 import com.eazybytes.accounts.service.IAccountsService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -118,8 +119,13 @@ public class AccountsController {
             responseCode = "200",
             description = "HTTP status OK"
     )
+    @Retry(name = "greetings", fallbackMethod = "greetingsFallback")
     @GetMapping("/greetings")
     public ResponseEntity<String> greetings() {
         return ResponseEntity.status(HttpStatus.OK).body(accountsConfigurationSettingsDto.getGreetingsMessage());
+    }
+
+    public ResponseEntity<String> greetingsFallback(Throwable throwable) {
+        return ResponseEntity.status(HttpStatus.OK).body("Some of random fallback logic returned from failed 'greetings' endpoint");
     }
 }
