@@ -1,4 +1,4 @@
 echo off
 
-echo - Clean and build %microserviceLogName% microservice Gradle project
-gradlew clean build
+echo - Clean, build and perform jibDockerBuild %microserviceLogName% microservice Gradle project
+gradlew clean build jibDockerBuild
