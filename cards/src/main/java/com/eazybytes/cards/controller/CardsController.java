@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -63,9 +62,10 @@ public class CardsController {
     @GetMapping("/fetch")
     public ResponseEntity<CardsDto> fetchCardsDetails(@RequestHeader(value = "eazybank-correlation-id") String correlationId,
                                                       @RequestParam String mobileNumber) {
-        LOGGER.debug("eazyBank-correlation-id found: {}", correlationId);
-
+        LOGGER.debug("fetchCardsDetails method start");
         CardsDto customerDto = iCardsService.fetchCards(mobileNumber);
+        LOGGER.debug("fetchCardsDetails method end");
+
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
 
