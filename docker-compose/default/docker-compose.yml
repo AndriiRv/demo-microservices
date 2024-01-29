@@ -55,7 +55,7 @@ services:
       start_period: 10s
 
   configserver-container:
-    image: kent0k/configserver:s11
+    image: kent0k/configserver:${DOCKER_IMAGE_TAG_VALUE}
     container_name: configserver-microservice
     ports:
       - 8071:8071
@@ -81,7 +81,7 @@ services:
         condition: service_healthy
 
   eurekaserver-container:
-    image: kent0k/eurekaserver:s11
+    image: kent0k/eurekaserver:${DOCKER_IMAGE_TAG_VALUE}
     container_name: eurekaserver-microservice
     ports:
       - 8070:8070
@@ -103,7 +103,7 @@ services:
       start_period: 10s
 
   gatewayserver-container:
-    image: kent0k/gatewayserver:s11
+    image: kent0k/gatewayserver:${DOCKER_IMAGE_TAG_VALUE}
     container_name: gatewayserver-microservice
     ports:
       - 8072:8072
@@ -121,6 +121,7 @@ services:
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_TIMEOUT: 1s
       OTEL_SERVICE_NAME: gatewayserver
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: http://keycloak-container:8080/realms/master/protocol/openid-connect/certs
     depends_on:
       accounts:
         condition: service_healthy
@@ -175,10 +176,8 @@ services:
       service: microservice-db-config
 
   accounts:
-    image: kent0k/accounts:s11
+    image: kent0k/accounts:${DOCKER_IMAGE_TAG_VALUE}
     container_name: accounts-microservice
-    ports:
-      - 8081:8080
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
@@ -197,10 +196,8 @@ services:
         condition: service_healthy
 
   loans:
-    image: kent0k/loans:s11
+    image: kent0k/loans:${DOCKER_IMAGE_TAG_VALUE}
     container_name: loans-microservice
-    ports:
-      - 8082:8090
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
@@ -219,10 +216,8 @@ services:
         condition: service_healthy
 
   cards:
-    image: kent0k/cards:s11
+    image: kent0k/cards:${DOCKER_IMAGE_TAG_VALUE}
     container_name: cards-microservice
-    ports:
-      - 8083:9000
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
