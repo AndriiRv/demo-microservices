@@ -11,11 +11,21 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+    function:
+      definition: updateCommunication # method name from AccountsFunctions.java
+    stream:
+      bindings:
+        updateCommunication-in-0: # expect from external app to this app
+          destination: send-message-as-long-from-message-microservice # it is selected name of queue (should be match with external app config Spring Cloud Stream)
+          group: ${spring.application.name}
+        sendCommunication-out-0:  # return from this app to external app
+          destination: accounts-message-dto-from-accounts-microservice # it is selected name of exchange (should be match with external app config Spring Cloud Stream)
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
+    connection-timeout: 10s
 
   datasource:
     url: jdbc:mysql://localhost:3306/accountsdb

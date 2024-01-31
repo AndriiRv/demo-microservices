@@ -1,0 +1,23 @@
+
+server:
+  port: 9010
+
+spring:
+  application:
+    name: "message-app"
+  cloud:
+    function:
+      definition: email|sms # call 'email' and 'sms' methods from MessageFunctions.java together as like one method
+    stream:
+      bindings:
+        emailsms-in-0: # expect from external app to this app
+          destination: accounts-message-dto-from-accounts-microservice # it is selected name of queue (should be match with external app config Spring Cloud Stream)
+          group: ${spring.application.name}
+        emailsms-out-0: # return from this app to external app
+          destination: send-message-as-long-from-message-microservice # it is selected name of exchange (should be match with external app config Spring Cloud Stream)
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s

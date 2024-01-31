@@ -18,7 +18,6 @@ repositories {
 
 ext {
     set('springCloudVersion', "2023.0.0")
-    set('otelVersion', "1.32.0")
 }
 
 jib {
@@ -26,18 +25,18 @@ jib {
         image = "eclipse-temurin:21-jdk"
     }
     to {
-        image = 'kent0k/eurekaserver:s13'
+        image = 'kent0k/message:s13'
     }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'io.micrometer:micrometer-registry-prometheus'
-    runtimeOnly "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelVersion}"
 
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+    implementation 'org.springframework.cloud:spring-cloud-stream' // include Spring Cloud Function (spring-cloud-function-context) also
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
 }
 
 dependencyManagement {
