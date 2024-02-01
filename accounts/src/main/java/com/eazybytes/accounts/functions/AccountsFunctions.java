@@ -16,7 +16,7 @@ public class AccountsFunctions {
     @Bean
     public Consumer<Long> updateCommunication(IAccountsService iAccountsService) {
         return accountNumber -> {
-            LOGGER.info("  account number: {}", accountNumber);
+            LOGGER.info("Updating Communication status for the account number: {}", accountNumber);
             iAccountsService.updateCommunicationStatus(accountNumber);
         };
     }

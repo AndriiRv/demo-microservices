@@ -25,7 +25,7 @@ jib {
         image = "eclipse-temurin:21-jdk"
     }
     to {
-        image = 'kent0k/message:s13'
+        image = 'kent0k/message:s14'
     }
 }
 
@@ -33,7 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     implementation 'org.springframework.cloud:spring-cloud-stream' // include Spring Cloud Function (spring-cloud-function-context) also
-    implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'

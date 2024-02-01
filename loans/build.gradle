@@ -36,7 +36,7 @@ jib {
         image = "eclipse-temurin:21-jdk"
     }
     to {
-        image = 'kent0k/loans:s13'
+        image = 'kent0k/loans:s14'
     }
 }
 

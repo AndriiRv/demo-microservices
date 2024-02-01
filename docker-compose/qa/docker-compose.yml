@@ -39,6 +39,28 @@ services:
       retries: 20
       start_period: 10s
 
+  kafka:
+    image: docker.io/bitnami/kafka:3.6
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      # KRaft settings
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
   redis-container:
     image: redis
     container_name: redis
@@ -185,6 +207,7 @@ services:
       SPRING_APPLICATION_NAME: accounts
       SPRING_DATASOURCE_URL: jdbc:mysql://accountsdb-container:3306/accountsdb
       OTEL_SERVICE_NAME: accounts
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "kafka:9092"
     healthcheck:
       test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -243,6 +266,7 @@ services:
       service: network-deploy-service
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq-spring-app
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "kafka:9092"
     depends_on:
       rabbit:
         condition: service_healthy
@@ -449,3 +473,7 @@ services:
 networks:
   kent0kmicroservicesharednetwork:
     driver: bridge
+
+volumes:
+  kafka_data:
+    driver: local

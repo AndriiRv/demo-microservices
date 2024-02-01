@@ -1,7 +1,7 @@
 echo off
 cls
 
-set tagValue=s13
+set tagValue=s14
 
 call generateDockerImages.bat accounts Accounts
 call generateDockerImages.bat cards Cards
