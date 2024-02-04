@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configserver-deployment
+  labels:
+    app: configserver # name should be matched
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: configserver # name should be matched
+  template:
+    metadata:
+      labels:
+        app: configserver # name should be matched
+    spec:
+      containers:
+        - name: configserver
+          image: docker.io/kent0k/configserver:s14
+          ports:
+            - containerPort: 8071 # port should be matched
+          volumeMounts:
+            - name: ssh-folder
+              mountPath: "/root/.ssh"
+              readOnly: false
+
+      volumes:
+        - name: ssh-folder
+          hostPath:
+            path: "/run/desktop/mnt/host/c/users/rewaa/.ssh"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: configserver
+spec:
+  selector:
+    app: configserver # name should be matched
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8071
+      targetPort: 8071 # port should be matched
