@@ -20,14 +20,14 @@ spec:
           ports:
             - containerPort: 8071 # port should be matched
           volumeMounts:
-            - name: ssh-folder
+            - name: ssh-volume
               mountPath: "/root/.ssh"
               readOnly: false
 
       volumes:
-        - name: ssh-folder
+        - name: ssh-volume
           hostPath:
-            path: "/run/desktop/mnt/host/c/users/rewaa/.ssh"
+            path: "/run/desktop/mnt/host/wsl/docker-desktop-data/version-pack-data/community/docker/volumes/ssh-volume/_data"
 
 ---
 apiVersion: v1
