@@ -2,6 +2,10 @@ echo off
 cls
 
 echo.
+echo - Create ssh-volume docker volume.
+call ../createSshVolume.bat
+
+echo.
 echo - Start observability and monitoring, kafka and production env docker containers.
 echo.
 

@@ -67,7 +67,7 @@ services:
         limits:
           memory: 700m
     volumes:
-      - ./../ssh_keys:/root/.ssh # we need manually add ssh keys from host OS to 'ssh_keys' folder to pass host ssh keys to local docker container to assume that GIT cloud config will work
+      - ssh-volume:/root/.ssh
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -252,3 +252,7 @@ services:
 networks:
   kent0kmicroservicesharednetwork:
     driver: bridge
+
+volumes:
+  ssh-volume:
+    external: true
