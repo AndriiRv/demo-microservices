@@ -33,7 +33,7 @@ public class EazyBankRouteConfiguration {
                                 .circuitBreaker(config -> config.setName("accountsCircuitBreaker")
                                         .setFallbackUri("forward:/contactSupport"))
                         )
-                        .uri("lb://ACCOUNTS"))
+                        .uri("http://accounts:8080"))
                 .route(predicateSpec -> predicateSpec
                         .path("/eazybank/cards/**")
                         .filters(gatewayFilterSpec -> gatewayFilterSpec.rewritePath("/eazybank/cards/(?<segment>,*)", "/${segment}")
@@ -41,7 +41,7 @@ public class EazyBankRouteConfiguration {
                                         .setMethods(HttpMethod.GET)
                                         .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
                         )
-                        .uri("lb://CARDS"))
+                        .uri("http://cards:9000"))
                 .route(predicateSpec -> predicateSpec
                         .path("/eazybank/loans/**")
                         .filters(gatewayFilterSpec -> gatewayFilterSpec.rewritePath("/eazybank/loans/(?<segment>,*)", "/${segment}")
@@ -49,6 +49,6 @@ public class EazyBankRouteConfiguration {
                                         .setRateLimiter(redisRateLimiterConfiguration.redisRateLimiter())
                                         .setKeyResolver(redisRateLimiterConfiguration.userKeyResolver()))
                         )
-                        .uri("lb://LOANS")).build();
+                        .uri("http://loans:8090")).build();
     }
 }

@@ -11,7 +11,7 @@ spring:
         git:
           uri:
             "git@github.com:AndriiRv/demo-microservices-config.git"
-          default-label: main
+          default-label: temp/remove-eureka-service-registry
           timeout: 5
           clone-on-start: true
           force-pull: true

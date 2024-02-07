@@ -18,7 +18,9 @@ kubectl apply -f dashboard-rolebinding.yml
 
 @REM echo.
 @REM echo - Add microservice manifests and configmaps.yml
-@REM kubectl apply -f ms_manifests/keycloak.yml -f configmaps.yml -f ms_manifests/configserver.yml -f ms_manifests/eurekaserver.yml -f ms_manifests/accounts.yml -f ms_manifests/loans.yml -f ms_manifests/cards.yml -f ms_manifests/gatewayserver.yml
+@REM kubectl apply -f ms_manifests/keycloak.yml -f configmaps.yml -f ms_manifests/configserver.yml -f ms_manifests/accounts.yml -f ms_manifests/loans.yml -f ms_manifests/cards.yml -f ms_manifests/gatewayserver.yml
+
+kubectl apply -f kubernetes-discoveryserver.yml
 
 echo.
 echo - Create ssh-volume docker volume.

@@ -40,12 +40,3 @@ services:
       SPRING_CONFIG_IMPORT: configserver:http://configserver-container:8071/
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-
-  microservice-eurekaserver-config:
-    extends:
-      service: microservice-configserver-config
-    depends_on:
-      eurekaserver-container:
-        condition: service_healthy
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver-container:8070/eureka/

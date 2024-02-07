@@ -19,10 +19,6 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'gatewayserver-container:8072' ]
-  - job_name: 'eurekaserver'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: [ 'eurekaserver-container:8070' ]
   - job_name: 'configserver'
     metrics_path: '/actuator/prometheus'
     static_configs:

@@ -25,7 +25,7 @@ jib {
         image = "eclipse-temurin:21-jdk"
     }
     to {
-        image = 'kent0k/message:s14'
+        image = 'kent0k/message:s17'
     }
 }
 

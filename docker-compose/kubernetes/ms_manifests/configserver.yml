@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: configserver
-          image: docker.io/kent0k/configserver:s14
+          image: docker.io/kent0k/configserver:s17
           ports:
             - containerPort: 8071 # port should be matched
           volumeMounts:

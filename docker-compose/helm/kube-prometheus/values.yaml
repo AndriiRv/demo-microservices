@@ -1201,15 +1201,6 @@ prometheus:
           ]
         },
         {
-          "job_name": "eurekaserver",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "eurekaserver:8070" ]
-            }
-          ]
-        },
-        {
           "job_name": "accounts",
           "metrics_path": "/actuator/prometheus",
           "static_configs": [

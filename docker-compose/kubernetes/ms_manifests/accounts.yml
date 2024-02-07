@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: accounts
-        image: docker.io/kent0k/accounts:s14
+        image: docker.io/kent0k/accounts:s17
         ports:
         - containerPort: 8080
         env:
@@ -35,11 +35,6 @@ spec:
             configMapKeyRef:
               name: eazybank-configmap
               key: SPRING_CONFIG_IMPORT
-        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-          valueFrom: 
-            configMapKeyRef:
-              name: eazybank-configmap
-              key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
 ---
 apiVersion: v1
 kind: Service

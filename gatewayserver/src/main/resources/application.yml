@@ -11,13 +11,17 @@ spring:
     password: guest
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true # Eureka server will share microservices data with Gateway
-          lowerCaseServiceId: true
       httpclient:
         connectTimeout: 5000
         responseTimeout: 10s
+    kubernetes:
+      discovery:
+        enabled: true
+        all-namespaces: true
+    discovery:
+      client:
+        health-indicator:
+          enabled: false
   data:
     redis:
       connect-timeout: 2s

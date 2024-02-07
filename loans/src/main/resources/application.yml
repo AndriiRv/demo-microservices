@@ -12,6 +12,10 @@ spring:
     port: 5672
     username: guest
     password: guest
+  cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
 
   datasource:
     url: jdbc:mysql://localhost:3307/loansdb
@@ -49,15 +53,6 @@ management:
 endpoints:
   shutdown:
     enabled: true
-
-eureka:
-  instance:
-    preferIpAddress: true
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8070/eureka/
 
 logging:
   level:
